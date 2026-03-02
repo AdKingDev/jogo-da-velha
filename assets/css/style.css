@@ -1,0 +1,226 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+
+    background: linear-gradient(
+        95deg, 
+        rgba(111, 33, 39, 0.877),
+        rgba(95, 35, 34, 0.7)
+    );
+}
+
+/* Conteúdo principal */
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, auto); /* 3 colunas de tamanho automático */
+    place-content: center;
+
+    justify-items: center;
+    align-items: center;
+    
+    width: 100%;
+    height: 100%;
+}
+
+.container.x .cell:not(.x):not(.o):hover::after,
+.container.x .cell:not(.x):not(.o):hover::before,
+.container.o .cell:not(.x):not(.o):hover::after,
+.container.o .cell:not(.x):not(.o):hover::before {
+    background: rgba(255, 255, 255, 0.3) !important; /*!important prioriza */
+}
+
+
+/* Célula */
+.cell {
+    --size: 100px;
+    width: var(--size);
+    height: var(--size);
+
+    border: 2px solid #fff;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+
+    cursor: pointer;
+}
+
+.cell.x, .cell.o {
+    cursor: not-allowed;
+}
+
+/* Remove bordas, deixando o formado clássico do jogo */
+.cell:nth-child(1), .cell:nth-child(2), .cell:nth-child(3) {
+    border-top: none;
+}
+
+.cell:nth-child(1), .cell:nth-child(4), .cell:nth-child(7) {
+    border-left: none;
+}
+
+.cell:nth-child(7), .cell:nth-child(8), .cell:nth-child(9) {
+    border-bottom: none;
+}
+
+.cell:nth-child(3), .cell:nth-child(6), .cell:nth-child(9) {
+    border-right: none;
+}
+
+/* Criando o X e mostrando as casas disponíveis */
+.cell.x::before, .cell.x::after,
+.container.x .cell:not(.x):not(.o):hover::after,
+.container.x .cell:not(.x):not(.o):hover::before {
+    content: "";
+
+    height: calc(100px * 0.10);
+    width: calc(100px * 0.9);
+
+    position: absolute;
+    
+    background: white;
+}
+
+.cell.x::before,
+.container.x .cell:not(.x):not(.o):hover::before {
+    transform: rotate(45deg);
+}
+
+.cell.x::after,
+.container.x .cell:not(.x):not(.o):hover::after {
+    transform: rotate(-45deg);
+}
+
+/* O */
+.cell.o::before,
+.cell.o::after,
+.container.o .cell:not(.x):not(.o):hover::before,
+.container.o .cell:not(.x):not(.o):hover::after {
+    content: "";
+
+    position: absolute;
+    border-radius: 50%;
+}
+
+/* Parte externa do O */
+.cell.o::before,
+.container.o .cell:not(.x):not(.o):hover::before {
+    height: calc(var(--size) * 0.9);
+    width: calc(var(--size) * 0.9);
+    background: white;
+}
+
+/* Parte interna do O */
+.cell.o::after,
+.container.o .cell:not(.x):not(.o):hover::after {
+    height: calc(100px * 0.7);
+    width: calc(100px * 0.7);
+
+    background: rgba(125, 33, 39, 0.877);
+}
+
+/* Mensagem de vitória */
+.winning-message {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(26, 25, 25, 0.404);
+}
+
+.winning-message-texto {
+    color: #fff;
+    font-size: 5rem;
+}
+
+.winning-message-botao {
+    font-size: 2.5rem;
+    color: rgb(2, 0, 102);
+
+    background: rgb(226, 204, 0);
+    border-radius: 5px;
+    border: none;
+
+    padding: 10px 15px;
+    margin-top: 16px;
+
+    cursor: pointer;
+}
+
+.winning-message-botao:hover {
+    color: rgb(226, 204, 0);
+    background: rgb(2, 0, 102);
+}
+
+.show-winning-message {
+    display: flex;
+}
+
+/* Placar */
+.score {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+
+    padding: 15px 25px;
+    border-radius: 10px;
+
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.score > p > span {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: rgb(226, 204, 0);
+}
+
+/* Créditos */
+footer {
+    position: fixed;
+    bottom: 0;
+
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+    width: 100%;
+
+    text-align: center;
+}
+
+footer > p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+}
+
+footer > p > a {
+    color: #000;
+    text-decoration: none;
+}
+
+footer > p > a:hover {
+    color: aqua;
+    text-decoration: underline;
+    transition: all 0.3s ease-in;
+}
