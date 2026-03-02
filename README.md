@@ -1,2 +1,4 @@
-# jogo-da-velha
-Jogo da velha responsivo e interativo, a onde é possível jogar contra a CPU.
+# Jogo da Velha
+Projeto inspirado no clássico Jogo da Velha, mantendo as regras clássicas do jogo.
+
+#README e comentários ainda serão adicionados
