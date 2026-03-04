@@ -10,15 +10,21 @@ let playerScore = 0;
 let cpuScore = 0;
 
 let isOTurn;
+let startingPlayer = 'x';
 
+// Cada array representa uma combinação vencedora
 const winningCombinations = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
     [0, 4, 8], [2, 4, 6]
 ];
 
+/*
+    Iniciar / reiniciar o jogo
+        - Limpa o tabuleiro, redefine eventos e remove mensagens de vitória
+*/
 const startGame = () => {
-    isOTurn = false;
+    isOTurn = startingPlayer === 'o';
 
     for (const cell of cellElements) {
         cell.classList.remove('o');
@@ -29,8 +35,20 @@ const startGame = () => {
 
     setBoardHoverClass();
     winningMessage.classList.remove('show-winning-message');
+
+    startingPlayer = startingPlayer === 'x' ? 'o' : 'x';
+
+    if (isOTurn) {
+        setTimeout(() => {
+            makeComputerMove();
+        }, 500);
+    }
 }
 
+/*
+    Finalizar partida
+        - Exibe mensagem de vitória ou empate, e atualiza o placar
+*/
 const endGame = (isDraw, winner) => {
     if (isDraw) {
         winningMessageText.innerText = 'Empate!';
@@ -49,6 +67,11 @@ const endGame = (isDraw, winner) => {
     winningMessage.classList.add('show-winning-message')
 }
 
+
+/*
+    Verificar vitória
+        - Retorna true se o jogador atual tiver uma combinação vencedora
+*/
 const checkForWin = (currentPlayer) => {
     return winningCombinations.some(combination => {
         return combination.every(index => {
@@ -57,27 +80,35 @@ const checkForWin = (currentPlayer) => {
     });
 };
 
+/*
+    Verificar empate
+        - Retorna true se todas as células estiverem preenchidas.
+*/
 const checkForDraw = () => {
     return [... cellElements].every(cell => {
         return cell.classList.contains('x') || cell.classList.contains('o');
     })
 }
 
+// Adiciona a classe correspondente ao jogador na célula clicada.
 const placeMark = (cell, classToAdd) => {
     cell.classList.add(classToAdd);
 };
 
+// Mostra visualmente de quem é a vez.
 const setBoardHoverClass = () => {
     board.classList.remove('o', 'x');
     board.classList.add(isOTurn ? 'o' : 'x');
 }
 
+// Trocar turno
 const swapTurns = () => {
     isOTurn = !isOTurn;
 
     setBoardHoverClass();
 }
 
+// Executada quando o jogador clica em uma célula
 const handleClick = (e) => {
     const cell = e.target;
     const player = 'x';
@@ -100,6 +131,7 @@ const handleClick = (e) => {
     }
 };
 
+// Buscar jogada vencedora
 const getWinningMove = (player) => {
     for (const combination of winningCombinations) {
         const cells = combination.map(index => cellElements[index]);
@@ -119,6 +151,12 @@ const getWinningMove = (player) => {
     return null;
 };
 
+/*
+    Movimento da CPU
+        - 1. Tenta vencer
+        - 2. Tenta bloquear jogador
+        - 3. Faz jogada aleatória
+*/
 const makeComputerMove = () => {
     const computer = 'o';
     const player = 'x';
